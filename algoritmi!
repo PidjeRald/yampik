@@ -5,6 +5,11 @@ void insertSort(int* a, int n) {
 		while (j >= 0 && a[j] > key)
 			a[j + 1] = a[j--];
 		a[j + 1] = key;
+
+
+		for (int i = 0; i < n; i++)
+			cout << a[i] << " ";
+		cout << endl;
 	}
 }
 
@@ -17,5 +22,35 @@ void setSort(int* a, int n) {
 		int temp = a[i];
 		a[i] = a[j0];
 		a[j0] = temp;
+
+
+		for (int i = 0; i < n; i++)
+			cout << a[i] << " ";
+		cout << endl;
+	}
+}
+
+void merge(int* a, int* b, int p, int q, int r) {
+	int in_pos1 = p, in_pos2 = q + 1, out_pos = 0;
+	while (in_pos1 <= q && in_pos2 <= r) {
+		if (a[in_pos1] < a[in_pos2])
+			b[out_pos++] = a[in_pos1++];
+		else
+			b[out_pos++] = a[in_pos2++];
+	}
+	while (in_pos1 <= q)
+		b[out_pos++] = a[in_pos1++];
+	while (in_pos2 <= r)
+		b[out_pos++] = a[in_pos2++];
+	for (int i = 0; i < r - p + 1; i++)
+		a[p + i] = b[i];
+}
+
+void mergeSort(int* a, int* b, int p, int r) {
+	if (p < r) {
+		int q = (p + r) / 2;
+		mergeSort(a, b, p, q);
+		mergeSort(a, b, q + 1, r);
+		merge(a, b, p, q, r);
 	}
 }
