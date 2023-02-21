@@ -54,3 +54,66 @@ void mergeSort(int* a, int* b, int p, int r) {
 		merge(a, b, p, q, r);
 	}
 }
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+using namespace std;
+
+void insertSort(int* a, int n) {
+	int count = 0;
+	for (int i = 1; i < n; i++) {
+		int key = a[i];
+		int j = i - 1;
+		while (j >= 0 && a[j] > key) {
+			a[j + 1] = a[j--];
+		}
+		a[j + 1] = key;
+	}
+}
+
+void clear(const char* filename) {
+	ofstream outfile(filename);
+	outfile.close();
+}
+
+void sort(const char* filename) {
+	fstream f(filename);
+	string str;
+	int count = 0;
+	while (getline(f, str, ' '))
+		count++;
+	f.clear();
+	f.seekg(0, ios::beg);
+	int i = 2;
+	do {
+		fstream f1("file1.txt"), f2("file2.txt");
+		for (int j = 0; j < count; j += 2*(2 ^ (i - 1))) {
+			for (int h = 0; h < (2 ^ (i - 1)); h++) {
+				getline(f, str, ' ');
+				f1 << str << " ";
+			}
+			for (int h = 0; h < (2 ^ (i - 1)); h++) {
+				getline(f, str, ' ');
+				f2 << str << " ";
+			}
+			f.clear();
+			f.seekg(0, ios::beg);
+		}
+		if (i < 2) {
+			f1.close();
+			clear("file1.txt");
+			f2.close();
+			clear("file2.txt");
+		}
+		i ^= 2;
+	} while (i < count);
+}
+
+int main() {
+	fstream f;
+	f.open("file.txt");
+	sort("file.txt");
+	return 0;
+}
