@@ -1,0 +1,145 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+using namespace std;
+
+void clear(const char* filename) {
+	ofstream outfile(filename);
+	outfile.close();
+}
+
+void sort(const char* filename) {
+	ifstream f(filename);
+	string str;
+	int count = 0;
+	while (getline(f, str, ' '))
+		count++;
+	f.clear();
+	f.seekg(0, ios::beg);
+	f.close();
+	int i = 0, t = 0, k = 0;
+	double a = count / 2.0;
+	if (a > count / 2)
+		t = a + 1;
+	else
+		t = a;
+	do {
+		k = t;
+		ofstream f1("file1.txt"), f2("file2.txt");
+		ifstream f("file.txt");
+		bool flag = 1;
+		while (!f.eof()) {
+			for (int j = 0; j < pow(2, i); j++) {
+				getline(f, str, ' ');
+				if (str != "") {
+					if (flag)
+						f1 << str << " ";
+					else
+						f2 << str << " ";
+				}
+			}
+			if (flag)
+				flag = 0;
+			else
+				flag = 1;
+		}
+		f1.close();
+		f2.close();
+		f.close();
+		clear("file.txt");
+		ifstream f3("file1.txt"), f4("file2.txt");
+		ofstream f5("file.txt");
+		int c1 = 0, c2 = 0;
+		while (k > 0) {
+			k--;
+			int n1 = 0, n2 = 0;;
+			if (k == 0) {
+				while (getline(f3, str, ' '))
+					if (str != "")
+						n1++;
+				f3.clear();
+				f3.seekg(0, ios::beg);
+				for (int i = 0; i < c1; i++) {
+					getline(f3, str, ' ');
+				}
+				while (getline(f4, str, ' '))
+					if (str != "")
+						n2++;
+				f4.clear();
+				f4.seekg(0, ios::beg);
+				for (int i = 0; i < c1; i++) {
+					getline(f4, str, ' ');
+				}
+			}
+			else
+				n1 = n2 = pow(2, i);
+			int k1 = 0, k2 = 0;
+			string str1, str2;
+			if (n1 != 0) {
+				getline(f3, str1, ' ');
+				c1++;
+			}
+			if (n2 != 0) {
+				getline(f4, str2, ' ');
+				c2++;
+			}
+			while ((k1 < n1) || (k2 < n2)) {
+				if (k1 == n1) {
+					f5 << str2 << " ";
+					k2++;
+					if (k2 != n2) {
+						c2++;
+						getline(f4, str2, ' ');
+					}
+				}
+				else
+					if (k2 == n2) {
+						f5 << str1 << " ";
+						k1++;
+						if (k1 != n1) {
+							c1++;
+							getline(f3, str1, ' ');
+						}
+					}
+					else
+						if (stoi(str1) > stoi(str2)) {
+							f5 << str2 << " ";
+							k2++;
+							if (k2 != n2) {
+								c2++;
+								getline(f4, str2, ' ');
+							}
+						}
+						else {
+							f5 << str1 << " ";
+							k1++;
+							if (k1 != n1) {
+								c1++;
+								getline(f3, str1, ' ');
+							}
+						}
+			}
+		}
+		f3.close();
+		clear("file1.txt");
+		f4.close();
+		clear("file2.txt");
+		f5.close();
+		a = t / 2.0;
+		if (a > t / 2)
+			t = a + 1;
+		else
+			t = a;
+		i++;
+	} while (pow(2, i) < count);
+}
+
+// 72 8 30 31 2 6 5
+
+int main() {
+	ifstream f;
+	f.open("file.txt");
+	sort("file.txt");
+	return 0;
+}
